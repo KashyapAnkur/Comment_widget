@@ -1,0 +1,39 @@
+body{
+    color: white;
+    background-color: black;
+}
+#parentComment {
+    padding: 10px;
+    font-size:19px;
+    border: 1px solid #888; 
+}
+
+#addComment {
+    width: 1080px;
+    height: 50px;
+    font-size:23px;
+    color: white;
+    background-color: purple;
+    border: none;
+}
+
+.cols {
+    padding:80px;
+    padding-top:0px;
+    padding-bottom:0px;
+    font-size:23px;
+}
+
+.edit {
+    cursor: pointer;
+    color: purple;
+}
+
+#cancelEditComment {
+    width: 1080px;
+    height: 50px;
+    font-size:23px;
+    color: white;
+    background-color: grey;
+    border: none;
+}

@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>Comment Widget</title>
+        <link rel="stylesheet" href="style.css" >
+    </head>
+    <body>
+        <center>
+            <div class="main">
+                <h1>Comment widget</h1>
+                <textarea id="parentComment" placeholder="Enter comment" rows="5" cols="100" ></textarea><br /><br />
+                <button id="addComment" onClick="addEditComment();">Add comment</button><br /><br />
+                <button id="cancelEditComment" style="display:none;">Cancel</button>
+                <br /><br />
+                <div class="comments"></div>
+            </div>
+        </center>
+    </body>
+</html>
+
+<script>
+
+    let parentCommentBox = document.querySelector("#parentComment");
+    let addCommentButton = document.querySelector("#addComment");
+    let comment = document.querySelector(".comments");
+    let cancelEditComment = document.querySelector("#cancelEditComment");
+
+    let id = localStorage.getItem("id") ? +(localStorage.getItem("id")) : 0;
+    let comments = localStorage.getItem("comments") ? JSON.parse(localStorage.getItem("comments")) : [];
+    let action = "add";
+    let editID = "";
+
+    cancelEditComment.addEventListener("click", () => {
+        addCommentButton.innerHTML = "Add comment";
+        cancelEditComment.style.display = "none";
+        action = "add";
+        editID = "";
+    });
+
+    function addEditComment(){
+        switch(action) {
+            case "add": {
+                if(parentCommentBox.value.trim().length > 0){
+                    comments.push({
+                        comment: parentCommentBox.value,
+                        _id: id,
+                        isLiked: false
+                    });
+                    localStorage.setItem("comments", JSON.stringify(comments));
+                    id += 1;
+                    localStorage.setItem("id",id);
+                    insertCommentsToDom();
+                } else {
+                    alert("Field cannot be blank");
+                }
+                break;
+            }
+            case "edit": {
+                let ls = JSON.parse(localStorage.getItem("comments"));
+                ls.map( (val) => {
+                    if(editID == val._id){
+                        if(parentCommentBox.value.trim().length > 0){
+                            val.comment = parentCommentBox.value;
+                            localStorage.setItem("comments", JSON.stringify(ls));
+                            insertCommentsToDom();
+                            parentCommentBox.value = "";
+                            cancelEditComment.style.display = "none";
+                        } else {
+                            parentCommentBox.value = "";
+                            parentCommentBox.focus();
+                            alert("Field cannot be blank");
+                        }
+                    }
+                });
+                break;
+            }
+        }
+    }
+
+    function beginEdit(id) {
+        parentCommentBox.focus();
+        action = "edit";
+        editID = id;
+        addCommentButton.innerHTML = "Save comment";
+        cancelEditComment.style.display = "block";
+    }
+
+    function likeComment(id) {
+        let ls = JSON.parse(localStorage.getItem("comments"));
+        ls.map( (val) => {
+            if(id == val._id){
+                val.isLiked = val.isLiked ? false : true;
+            }
+        });
+        localStorage.setItem("comments", JSON.stringify(ls));
+        insertCommentsToDom();
+    }
+
+    function deleteComment(id) {
+        if(confirm("Are you sure you want to delete this comment?")){
+            let ls = JSON.parse(localStorage.getItem("comments"));
+            let temp = ls.filter( (val) => {
+                if(id == val._id)
+                return false;
+                else
+                return true;
+            });
+            localStorage.setItem("comments", JSON.stringify(temp));
+            insertCommentsToDom();
+        }
+    }
+
+    function insertCommentsToDom() {
+        let comments = localStorage.getItem("comments") ? JSON.parse(localStorage.getItem("comments")) : [];    
+        let table = `<table>`;
+        comments.forEach( (val,index) => {
+            table += `
+                <tr id=${val._id}>
+                    <td class="cols">${val.comment}</td>
+                    <td class="cols">${val.isLiked ? "<b style='color:orange;cursor:pointer;' onClick='likeComment(" + val._id + ");'>Liked</b>" : "<b style='cursor:pointer;color:grey;' onClick=likeComment(" + val._id + ")>Like</b>"}</td>
+                    <td class="cols edit" onClick=beginEdit(` + val._id + `)>Edit</td>
+                    <td style='cursor:pointer;color:red;' onClick='deleteComment(` + val._id + `)'>X</td>
+                </tr>`;
+        });
+        table += `</table>`;
+        comment.innerHTML = table;
+    }
+
+    insertCommentsToDom();
+
+    window.addEventListener("keyup", (e) => {
+        if(e.keyCode == 27) {
+            addCommentButton.innerHTML = "Add comment";
+            cancelEditComment.style.display = "none";
+        }
+    })
+
+</script>
