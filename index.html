@@ -64,6 +64,8 @@
                             insertCommentsToDom();
                             parentCommentBox.value = "";
                             cancelEditComment.style.display = "none";
+                            action = "add";
+                            addCommentButton.innerHTML = "Add comment";
                         } else {
                             parentCommentBox.value = "";
                             parentCommentBox.focus();
@@ -76,8 +78,9 @@
         }
     }
 
-    function beginEdit(id) {
+    function beginEdit(id, val) {
         parentCommentBox.focus();
+        parentCommentBox.value = val;
         action = "edit";
         editID = id;
         addCommentButton.innerHTML = "Save comment";
@@ -117,7 +120,7 @@
                 <tr id=${val._id}>
                     <td class="cols">${val.comment}</td>
                     <td class="cols">${val.isLiked ? "<b style='color:orange;cursor:pointer;' onClick='likeComment(" + val._id + ");'>Liked</b>" : "<b style='cursor:pointer;color:grey;' onClick=likeComment(" + val._id + ")>Like</b>"}</td>
-                    <td class="cols edit" onClick=beginEdit(` + val._id + `)>Edit</td>
+                    <td class="cols edit" onClick=beginEdit(` + val._id + ",'" + val.comment + `')>Edit</td>
                     <td style='cursor:pointer;color:red;' onClick='deleteComment(` + val._id + `)'>X</td>
                 </tr>`;
         });
@@ -131,6 +134,7 @@
         if(e.keyCode == 27) {
             addCommentButton.innerHTML = "Add comment";
             cancelEditComment.style.display = "none";
+            action = "add";
         }
     })
 
