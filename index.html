@@ -48,6 +48,7 @@
                     localStorage.setItem("comments", JSON.stringify(comments));
                     id += 1;
                     localStorage.setItem("id",id);
+                    parentCommentBox.value = "";
                     insertCommentsToDom();
                 } else {
                     alert("Field cannot be blank");
