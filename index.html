@@ -54,7 +54,7 @@
                     localStorage.setItem("comments", JSON.stringify(comments));
                     id += 1;
                     localStorage.setItem("id",id);
-                    parentCommentBox.value = "";
+                    parentCommentBox.value = "";alert();
                     insertCommentsToDom();
                 } else {
                     alert("Field cannot be blank");
@@ -68,11 +68,11 @@
                         if(parentCommentBox.value.trim().length > 0){
                             val.comment = parentCommentBox.value;
                             localStorage.setItem("comments", JSON.stringify(ls));
-                            insertCommentsToDom();
                             parentCommentBox.value = "";
                             cancelEditComment.style.display = "none";
                             action = "add";
                             addCommentButton.innerHTML = "Add comment";
+                            insertCommentsToDom();
                         } else {
                             parentCommentBox.value = "";
                             parentCommentBox.focus();
@@ -134,7 +134,7 @@
                 </tr>`;
         });
         table += `</table>`;
-        comment.innerHTML = "table";
+        comment.innerHTML = table;
     }
 
     insertCommentsToDom();
