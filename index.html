@@ -122,6 +122,7 @@
 
     function insertCommentsToDom() {
         let comments = localStorage.getItem("comments") ? JSON.parse(localStorage.getItem("comments")) : [];    
+        console.log(comments);
         let table = `<table>`;
         comments.forEach( (val,index) => {
             table += `
