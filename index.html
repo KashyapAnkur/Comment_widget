@@ -46,6 +46,9 @@
                         _id: id,
                         isLiked: false
                     });
+                    // local array has current data until page reloads but it does not have data of updated localstorage when a particular data gets deleted
+                    // so to fetch data from localstorage again here to get the latest data
+                    
                     localStorage.setItem("comments", JSON.stringify(comments));
                     id += 1;
                     localStorage.setItem("id",id);
@@ -101,8 +104,8 @@
     }
 
     function deleteComment(id) {
-        comments = [];
         if(confirm("Are you sure you want to delete this comment?")){
+            comments = [];
             let ls = JSON.parse(localStorage.getItem("comments"));
             let temp = ls.filter( (val) => {
                 if(id == val._id)
