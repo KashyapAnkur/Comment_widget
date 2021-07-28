@@ -38,9 +38,11 @@
     });
 
     function addEditComment(){
+        comment = [];
         switch(action) {
             case "add": {
                 if(parentCommentBox.value.trim().length > 0){
+                    comments = localStorage.getItem("comments", JSON.parse(comments)); // fetched latest data
                     comments.push({
                         comment: parentCommentBox.value,
                         _id: id,
